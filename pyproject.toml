@@ -19,6 +19,7 @@ dependencies = [
     "langgraph>=1.2.12",
     "litellm>=1.103.2",
     "python-dotenv>=1.2.4",
+    "streamlit>=1.65.0",
     "tavily-python>=0.8.4",
 ]
 

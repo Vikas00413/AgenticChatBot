@@ -10,3 +10,4 @@ langchainhub
 litellm
 langchain-litellm
 tavily-python
+streamlit
