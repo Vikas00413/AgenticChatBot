@@ -11,3 +11,4 @@ litellm
 langchain-litellm
 tavily-python
 streamlit
+pydantic
