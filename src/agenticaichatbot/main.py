@@ -56,4 +56,8 @@ def load_langgraph_agentic_ai_app():
         except Exception as e:
              st.error(f"Error : Grah Graph failed {e}")
              return 
+
+
+if __name__ == "__main__":
+    load_langgraph_agentic_ai_app()
     
