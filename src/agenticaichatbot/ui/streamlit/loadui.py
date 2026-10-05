@@ -22,16 +22,16 @@ class LoadStreamlitUI:
             ## LLm selctions
             self.user_controls['selected_llm'] = st.selectbox("Select LLM", llm_options)
 
-            if self.user_controls['selected_llm'] == 'Groq':
+            if self.user_controls['selected_llm'] == 'OPENAI' :
                 ## Model selection
-                model_options = self.config.get_groq_model_options()
-                self.user_controls['selected_groq_model'] = st.selectbox("Select Model", model_options)
+                model_options = self.config.get_openai_model_options()
+                self.user_controls['selected_openai_model'] = st.selectbox("Select Model", model_options)
                 api_key = st.text_input("API KEY", type='password')
-                st.session_state["GROQ_API_KEY"] = api_key
-                self.user_controls['GROQ_API_KEY'] = api_key
+                st.session_state["OPENAI_API_KEY"] = api_key
+                self.user_controls['OPENAI_API_KEY'] = api_key
                 
-                if not self.user_controls['GROQ_API_KEY'] :
-                    st.warning("⚠️ Please Enter your Groq API KEY , Please check https://console.groq.com/keys")
+                if not self.user_controls['OPENAI_API_KEY'] :
+                    st.warning("⚠️ Please Enter your OpenAI API KEY , Please check https://platform.openai.com/api-keys")
 
             ## Usecase selection
             self.user_controls['selected_usecase']=st.selectbox('Select Usecases', usecase_options)

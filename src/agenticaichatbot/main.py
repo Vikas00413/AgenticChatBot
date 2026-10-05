@@ -1,8 +1,8 @@
 import streamlit as st
 from src.agenticaichatbot.ui.streamlit.loadui import LoadStreamlitUI
-from src.agenticaichatbot.LLMs.graqllm import GroqLLM
+from src.agenticaichatbot.LLMs.openaillm import ChatOpenAI
 from src.agenticaichatbot.graph.graph_builder import GraphBuilder
-from src.agenticaichatbot.ui.streamlit.display_result import DsplayResultStreamlit
+from src.agenticaichatbot.ui.streamlit.display_result import DisplayResultStreamlit
 
 
 def load_langgraph_agentic_ai_app():
@@ -21,13 +21,17 @@ def load_langgraph_agentic_ai_app():
         st.error(" Error , Failed load user input from the UI.")
         return
 
+    chat_history = st.session_state.setdefault("chat_history", [])
+    for message in chat_history:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
 
     user_message = st.chat_input('Enter Your Message:')
 
     if user_message :
         try :
             # config LLM
-            obj_llm_config = GroqLLM(user_controls_input=user_input)
+            obj_llm_config = ChatOpenAI(user_controls_input=user_input)
             model= obj_llm_config.get_llm_model()
 
             if not model:
@@ -44,7 +48,7 @@ def load_langgraph_agentic_ai_app():
             graph_builder=GraphBuilder(model=model)
             try:
                 graph=graph_builder.setup_graph(usecase)
-                DsplayResultStreamlit(usecase,graph,user_message).display_result_on_ui()
+                DisplayResultStreamlit(usecase,graph,user_message).display_result_on_ui()
             except Exception as e:
                 st.error(f"Error : Graph setup failed {e}")
                 return 
