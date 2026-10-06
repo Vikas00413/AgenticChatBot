@@ -26,7 +26,10 @@ def load_langgraph_agentic_ai_app():
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    user_message = st.chat_input('Enter Your Message:')
+    if st.session_state.IsFetchButtonClicked:
+        user_message = st.session_state.get('time_frame')
+    else:   
+        user_message = st.chat_input('Enter Your Message:')
 
     if user_message :
         try :

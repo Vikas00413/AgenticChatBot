@@ -13,6 +13,8 @@ class LoadStreamlitUI:
     def load_streamlit_ui(self):
         st.set_page_config(page_title="👤" +self.config.get_page_title() , layout='wide')
         st.header("" +self.config.get_page_title())
+        st.session_state.time_frame = ''
+        st.session_state.IsFetchButtonClicked = False
 
         with st.sidebar:
 
@@ -35,12 +37,23 @@ class LoadStreamlitUI:
 
             ## Usecase selection
             self.user_controls['selected_usecase']=st.selectbox('Select Usecases', usecase_options)
-            if self.user_controls['selected_usecase'] == 'Chatbot With Web':
+            if self.user_controls['selected_usecase'] == 'Chatbot With Web' or self.user_controls['selected_usecase'] == 'AI News':
                 # Additional UI elements for web chatbot use case
                 os.environ["TAVILY_API_KEY"]=self.user_controls['TAVILY_API_KEY']= st.session_state["TAVILY_API_KEY"] = st.text_input("TAVILY API KEY", type='password')
 
                 if not self.user_controls['TAVILY_API_KEY']:
                     st.warning("⚠️ Please Enter your TAVILY API KEY , Please check https://auth.tavily.com/")
+
+            if self.user_controls['selected_usecase'] == 'AI News':
+                # Additional UI elements for AI News use case
+               st.subheader("AI News Explorer")
+
+               with st.sidebar:
+                    time_frame= st.selectbox("Select Time Frame", ["Daily", "Weekly", "Monthly"] , index=0)
+
+                    if st.button(" Fetch Latest AI News",use_container_width=True):
+                        st.session_state.IsFetchButtonClicked = True
+                        st.session_state.time_frame = time_frame
 
 
         return self.user_controls

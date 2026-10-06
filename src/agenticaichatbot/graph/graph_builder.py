@@ -5,6 +5,7 @@ from src.agenticaichatbot.state.state import State
 from src.agenticaichatbot.nodes.basic_chatbot_node import BasicChatbotNode
 from langgraph.prebuilt import ToolNode,tools_condition
 from src.agenticaichatbot.nodes.chatbot_with_tool_node import ChatbotWithToolNode
+from src.agenticaichatbot.nodes.ai_news_node import AINewsNode
 
 
 class GraphBuilder:
@@ -56,6 +57,29 @@ class GraphBuilder:
         self.graph_builder.add_edge('tools',"chatbot")
         self.graph_builder.add_edge('chatbot',END)
 
+    def ai_news_build_graph(self):
+        """
+        Builds a graph for the AI News use case.
+        This method creates a graph that includes a chatbot node and a tool node 
+        specifically designed for fetching AI news. It sets up the necessary nodes 
+        and edges to facilitate the flow of information between the chatbot and the tool.
+        The chatbot node is set as the entry point.
+        """
+        ai_news_node=AINewsNode(self.llm)
+
+        ## Added Nodes
+        self.graph_builder.add_node("fetch_news", ai_news_node.fetch_news)
+        self.graph_builder.add_node("summarize_news", ai_news_node.summarize_news)
+        self.graph_builder.add_node("save_result", ai_news_node.save_result)
+       
+        ## Add edges
+        self.graph_builder.set_entry_point("fetch_news")
+        self.graph_builder.add_edge("fetch_news", "summarize_news")
+        self.graph_builder.add_edge("summarize_news", "save_result")
+        self.graph_builder.add_edge("save_result", END)
+   
+
+
  
 
     def setup_graph(self, usecase: str):
@@ -66,6 +90,8 @@ class GraphBuilder:
             self.basic_chatbot_build_graph()
         if usecase == "Chatbot With Web":
             self.chatbot_qith_tools_build_graph()
+        if usecase == "AI News":
+            self.ai_news_build_graph()
 
         return self.graph_builder.compile()
 
